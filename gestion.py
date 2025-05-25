@@ -103,10 +103,10 @@ if __name__ == '__main__':
     if reg1: print(f"Registrado: {reg1['nombre']}, Puntaje final: {reg1['puntaje_final']}, Estado: {reg1['estado']}")
 
     reg2 = registrar_participante("Luis Gómez", {"resistencia": 60, "fuerza": 65, "velocidad": 50})
-    ir reg2: print(f"Registrado: {reg2['nombre']}, Puntaje Final: {reg2['puntaje_final']}, Estado: {reg2['estado']}")
+    if reg2: print(f"Registrado: {reg2['nombre']}, Puntaje Final: {reg2['puntaje_final']}, Estado: {reg2['estado']}")
 
     reg3 = registrar_participante("Ana Pérez", {"resistencia": 90, "fuerza": 80, "velocidad": 85})
-    ir reg3: print(f"Registrado: {reg3['nombre']}, Puntaje Final: {reg3['puntaje_final']}, Estado: {reg3['estado']}")
+    if reg3: print(f"Registrado: {reg3['nombre']}, Puntaje Final: {reg3['puntaje_final']}, Estado: {reg3['estado']}")
 
     print("\n--- Reporte General (Datos Base) ---")
     for item in obtener_reporte_general_data():
@@ -118,5 +118,5 @@ if __name__ == '__main__':
         for prueba, detalles in item['detalle_pruebas'].items():
             print(f"    {PRUEBAS[prueba]}: Puntaje {detalles['puntaje']}, Dificultad {detalles['dificultad']}")
 
-    print(f"\nPuntaje promedio del grupo" {calcular_puntaje_promedio_grupo()}")
+    print(f"\nPuntaje promedio del grupo", calcular_puntaje_promedio_grupo())
     print(f"Clasificacion (por registro): {contar_clasificados()}")
