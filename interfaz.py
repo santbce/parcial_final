@@ -94,13 +94,4 @@ class CompetenciaApp:
             for entry_widget in self.puntaje_entries.values():
                 entry_widget.delete(0, tk.END)
         else:
-            messagebox.showerror("Error de Registro", "No se pudo registrar al participante. Verifique los datos.")
-
-        
-
-
-        
-
-        
-
-
+            messagebox.showerror("Error de Registro", "No se pudo registrar al participante. Verifique los datos.")    
