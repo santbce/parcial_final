@@ -261,3 +261,9 @@ class CompetenciaApp:
         canvas_widget = canvas.get_tk_widget()
         canvas_widget.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
         canvas.draw()
+
+
+if __name__ == '__main__':
+    root = tk.Tk()
+    app = CompetenciaApp(root)
+    root.mainloop()
