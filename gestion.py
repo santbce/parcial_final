@@ -80,3 +80,19 @@ def calcular_puntaje_promedio_grupo():
         return 0
     total_puntajes = sum(r["puntaje_final"] for r in datos_participantes)
     return round(total_puntajes / len(datos_participantes))
+
+def contar_clasificados():
+    """
+    cuenta cauntos participantes clasificaron y cuantos no.
+    cada registro se considera una entrada individual en el conteo.
+    si se desea contar solo una vez por participante(por ejemplo, su ultima participacion)
+    habia que ajustar la logica para evitar duplicados"""
+
+    clasificadosd = 0
+    no_clasificados = 0
+    for registro in datos_participantes:
+        if registro["estado"] == "Clasificó":
+            clasificados += 1
+        else:
+            no_clasificados += 1
+        return{"clasificó": clasificados, "no clasificó": no_clasificados}
