@@ -59,6 +59,48 @@ class CompetenciaApp:
         exit_button = ttk.Button(main_frame, text="4. Salir", command=self.root.quit)
         exit_button.pack(pady=20)
 
+    def registrar_participante_gui(self):
+        nombre_participante = self.nombre_participante_entry.get()
+        if not nombre_participante.strip():
+            messagebox.showerror("Error", "El nombre del participante no puede estar vacío.")
+            return
+
+        resultados_pruebas = {}
+        try:
+            for key, entry_widget in self.puntaje_entries.items():
+                puntaje_str = entry_widget.get()
+                if not puntaje_str: 
+                    messagebox.showerror("Error de Entrada", f"El puntaje para {gestion.PRUEBAS[key]} no puede estar vacío.")
+                    return
+                
+                puntaje = int(puntaje_str)
+                if not (0 <= puntaje <= 100):
+                    messagebox.showerror("Error de Validación", 
+                                         f"El puntaje para {gestion.PRUEBAS[key]} debe estar entre 0 y 100.")
+                    return
+                resultados_pruebas[key] = puntaje
+        except ValueError:
+            messagebox.showerror("Error de Entrada", "Los puntajes deben ser números enteros.")
+            return
+
+        registro = gestion.registrar_participante(nombre_participante, resultados_pruebas)
+
+        if registro:
+            messagebox.showinfo("Registro Exitoso", 
+                                f"Participante '{nombre_participante}' registrado.\n"
+                                f"Puntaje Final: {registro['puntaje_final']}\n"
+                                f"Estado: {registro['estado']}")
+            self.nombre_participante_entry.delete(0, tk.END)
+            for entry_widget in self.puntaje_entries.values():
+                entry_widget.delete(0, tk.END)
+        else:
+            messagebox.showerror("Error de Registro", "No se pudo registrar al participante. Verifique los datos.")
+
+        
+
+
+        
+
         
 
 
