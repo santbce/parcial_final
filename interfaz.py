@@ -26,4 +26,39 @@ class CompetenciaApp:
         self.nombre_participante_entry = ttk.Entry(reg_frame, width=30)
         self.nombre_participante_entry.grid(row=0, column=1, padx=5, pady=5, sticky=tk.EW)
 
+        self.puntaje_entries = {}
+        row_num = 1
+        for key, nombre_prueba in gestion.PRUEBAS.items():
+            ttk.Label(reg_frame, text=f"Puntaje {nombre_prueba} (0-100):").grid(row=row_num, column=0, padx=5, pady=5, sticky=tk.W)
+            entry = ttk.Entry(reg_frame, width=10)
+            entry.grid(row=row_num, column=1, padx=5, pady=5, sticky=tk.W)
+            self.puntaje_entries[key] = entry
+            row_num += 1
+        
+        reg_button = ttk.Button(reg_frame, text="Registrar Participante", command=self.registrar_participante_gui)
+        reg_button.grid(row=row_num, column=0, columnspan=2, pady=10)
+
+        
+        report_gen_frame = ttk.LabelFrame(main_frame, text="2. Mostrar Reporte General", padding="10")
+        report_gen_frame.pack(fill=tk.X, pady=10)
+        
+        report_gen_button = ttk.Button(report_gen_frame, text="Ver Reporte General", command=self.mostrar_reporte_general_gui)
+        report_gen_button.pack(pady=5)
+
+        
+        report_ind_frame = ttk.LabelFrame(main_frame, text="3. Mostrar Reporte Individual", padding="10")
+        report_ind_frame.pack(fill=tk.X, pady=10)
+
+        ttk.Label(report_ind_frame, text="Nombre del Participante:").pack(side=tk.LEFT, padx=5)
+        self.participante_reporte_entry = ttk.Entry(report_ind_frame, width=25)
+        self.participante_reporte_entry.pack(side=tk.LEFT, padx=5)
+        report_ind_button = ttk.Button(report_ind_frame, text="Ver Reporte Individual", command=self.mostrar_reporte_individual_gui)
+        report_ind_button.pack(side=tk.LEFT, padx=5)
+
+        
+        exit_button = ttk.Button(main_frame, text="4. Salir", command=self.root.quit)
+        exit_button.pack(pady=20)
+
+        
+
 
