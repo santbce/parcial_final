@@ -58,3 +58,16 @@ def registrar_participante(nombre_participante, resultados_pruebas):
     }
     datos_participantes.append(registro)
     return registro
+
+def obtener_reporte_general_data():
+    """
+    Prepara los datos para el reporte general.
+    """
+    reporte = []
+    for registro in datos_participantes:
+        reporte.append({
+            "nombre": registro["nombre"],
+            "puntaje_final": registro["puntaje_final"],
+            "estado": registro["estado"]
+        })
+    return reporte
