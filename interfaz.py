@@ -101,3 +101,80 @@ class CompetenciaApp:
         if not gestion.datos_participantes:
             messagebox.showinfo("Reporte General", "No hay participantes registrados.")
             return
+
+        report_window = tk.Toplevel(self.root)
+        report_window.title("Reporte General de Rendimiento")
+        report_window.geometry("800x700") 
+
+        
+        text_frame = ttk.Frame(report_window)
+        text_frame.pack(pady=10, padx=10, fill=tk.X)
+
+        text_area = tk.Text(text_frame, wrap=tk.WORD, height=15, width=90)
+        text_area.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        
+        scrollbar = ttk.Scrollbar(text_frame, command=text_area.yview)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        text_area.config(yscrollcommand=scrollbar.set)
+
+        report_str = "--- Reporte General de Rendimiento ---\n\n"
+        for item in gestion.obtener_reporte_general_data():
+            report_str += f"Participante: {item['nombre']}, Puntaje Final: {item['puntaje_final']}, Estado: {item['estado']}\n"
+        
+        report_str += f"\n--- Estadísticas del Grupo ---\n"
+        report_str += f"Puntaje Promedio del Grupo: {gestion.calcular_puntaje_promedio_grupo()}\n"
+
+        pd_data = []
+        for reg in gestion.datos_participantes:
+            row = {
+                "nombre": reg["nombre"],
+                "puntaje_final": reg["puntaje_final"],
+                "estado": reg["estado"]
+            }
+            for prueba_key, detalles in reg["detalle_pruebas"].items():
+                row[f"{prueba_key}_puntaje"] = detalles["puntaje"]
+            pd_data.append(row)
+        
+        df = pd.DataFrame(pd_data)
+
+        if not df.empty:
+            report_str += "\n--- Estadísticas Descriptivas (Puntajes por Prueba y Final) ---\n"
+            puntaje_cols = [col for col in df.columns if '_puntaje' in col or col == 'puntaje_final']
+            if puntaje_cols:
+                report_str += df[puntaje_cols].describe().to_string()
+            else:
+                report_str += "No hay suficientes datos de puntajes para estadísticas descriptivas.\n"
+            report_str += "\n\n"
+
+            report_str += "--- Matriz de Correlación (Puntajes por Prueba) ---\n"
+            score_cols_for_corr = [col for col in df.columns if '_puntaje' in col]
+            if len(score_cols_for_corr) > 1:
+                report_str += df[score_cols_for_corr].corr().to_string()
+            else:
+                report_str += "Se necesitan al menos dos pruebas con puntajes para calcular la correlación.\n"
+            report_str += "\n"
+
+        text_area.insert(tk.END, report_str)
+        text_area.config(state=tk.DISABLED)
+
+        
+        chart_frame = ttk.Frame(report_window)
+        chart_frame.pack(pady=10, padx=10, fill=tk.BOTH, expand=True)
+
+        conteo_clasificados = gestion.contar_clasificados()
+        labels = conteo_clasificados.keys()
+        sizes = conteo_clasificados.values()
+        
+        if sum(sizes) > 0: 
+            fig = Figure(figsize=(5, 4), dpi=100)
+            ax = fig.add_subplot(111)
+            ax.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=90)
+            ax.axis('equal')  
+            ax.set_title('Distribución de Clasificación')
+
+            canvas = FigureCanvasTkAgg(fig, master=chart_frame)
+            canvas_widget = canvas.get_tk_widget()
+            canvas_widget.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+            canvas.draw()
+        else:
+            ttk.Label(chart_frame, text="No hay datos suficientes para el gráfico de torta.").pack()
