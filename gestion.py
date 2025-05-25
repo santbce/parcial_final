@@ -72,6 +72,16 @@ def obtener_reporte_general_data():
         })
     return reporte
 
+def obtener_datos_participante(nombre_participante):
+    """
+    Obtiene todos los registros para un participante específico.
+    """
+    registros_filtrados = []
+    for registro in datos_participantes:
+        if registro["nombre"].lower() == nombre_participante.lower():
+            registros_filtrados.append(registro)
+    return registros_filtrados
+
 def calcular_puntaje_promedio_grupo():
     """
     Calcula el puntaje promedio final de todos los participantes.
@@ -88,7 +98,7 @@ def contar_clasificados():
     si se desea contar solo una vez por participante(por ejemplo, su ultima participacion)
     habia que ajustar la logica para evitar duplicados"""
 
-    clasificadosd = 0
+    clasificados = 0
     no_clasificados = 0
     for registro in datos_participantes:
         if registro["estado"] == "Clasificó":
