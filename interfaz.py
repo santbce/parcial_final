@@ -232,3 +232,32 @@ class CompetenciaApp:
         hist_frame.pack(pady=5, padx=10, fill=tk.BOTH, expand=True)
 
         fig = Figure(figsize=(8, 6), dpi=100)
+
+    
+        ax1 = fig.add_subplot(311)
+        ax1.bar(nombres_pruebas, puntajes_pruebas, color='skyblue')
+        ax1.set_title('Resultados por Prueba (Puntaje)')
+        ax1.set_ylabel('Puntaje')
+        ax1.set_ylim(0, 100) 
+
+        
+        ax2 = fig.add_subplot(312)
+        ax2.bar(nombres_pruebas, dificultades_pruebas, color='lightgreen')
+        ax2.set_title('Nivel de Dificultad Aplicado')
+        ax2.set_ylabel('Dificultad')
+        ax2.set_ylim(1.0, 1.3) 
+
+        
+        ax3 = fig.add_subplot(313)
+        ax3.bar(nombres_pruebas, ponderados_pruebas, color='salmon')
+        ax3.set_title('Puntaje Ponderado por Prueba')
+        ax3.set_ylabel('Puntaje Ponderado')
+        
+
+
+        fig.tight_layout(pad=2.0) 
+
+        canvas = FigureCanvasTkAgg(fig, master=hist_frame)
+        canvas_widget = canvas.get_tk_widget()
+        canvas_widget.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+        canvas.draw()
