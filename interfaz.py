@@ -96,7 +96,8 @@ class CompetenciaApp:
         else:
             messagebox.showerror("Error de Registro", "No se pudo registrar al participante. Verifique los datos.")
 
+
     def mostrar_reporte_general_gui(self):
         if not gestion.datos_participantes:
-            mensagebox.showinfo("Reporte General", "No hay participantes registrados.")
-            return   
+            messagebox.showinfo("Reporte General", "No hay participantes registrados.")
+            return
