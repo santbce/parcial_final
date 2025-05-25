@@ -71,3 +71,12 @@ def obtener_reporte_general_data():
             "estado": registro["estado"]
         })
     return reporte
+
+def calcular_puntaje_promedio_grupo():
+    """
+    Calcula el puntaje promedio final de todos los participantes.
+    """
+    if not datos_participantes:
+        return 0
+    total_puntajes = sum(r["puntaje_final"] for r in datos_participantes)
+    return round(total_puntajes / len(datos_participantes))
