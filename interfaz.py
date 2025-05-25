@@ -117,11 +117,11 @@ class CompetenciaApp:
         scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
         text_area.config(yscrollcommand=scrollbar.set)
 
-        report_str = "--- Reporte General de Rendimiento ---\n\n"
+        report_str = "Reporte General de Rendimiento\n\n"
         for item in gestion.obtener_reporte_general_data():
             report_str += f"Participante: {item['nombre']}, Puntaje Final: {item['puntaje_final']}, Estado: {item['estado']}\n"
         
-        report_str += f"\n--- Estadísticas del Grupo ---\n"
+        report_str += f"\Estadísticas del Grupo\n"
         report_str += f"Puntaje Promedio del Grupo: {gestion.calcular_puntaje_promedio_grupo()}\n"
 
         pd_data = []
@@ -138,7 +138,7 @@ class CompetenciaApp:
         df = pd.DataFrame(pd_data)
 
         if not df.empty:
-            report_str += "\n--- Estadísticas Descriptivas (Puntajes por Prueba y Final) ---\n"
+            report_str += "\nEstadísticas Descriptivas (Puntajes por Prueba y Final)\n"
             puntaje_cols = [col for col in df.columns if '_puntaje' in col or col == 'puntaje_final']
             if puntaje_cols:
                 report_str += df[puntaje_cols].describe().to_string()
@@ -178,3 +178,23 @@ class CompetenciaApp:
             canvas.draw()
         else:
             ttk.Label(chart_frame, text="No hay datos suficientes para el gráfico de torta.").pack()
+
+
+    def mostrar_reporte_individual_gui(self):
+        nombre_participante = self.participante_reporte_entry.get()
+        if not nombre_participante.strip():
+            messagebox.showerror("Error", "Ingrese el nombre del participante para el reporte.")
+            return
+
+        registros_participante = gestion.obtener_datos_participante(nombre_participante)
+
+        if not registros_participante:
+            messagebox.showinfo("Reporte Individual", f"No se encontraron registros para '{nombre_participante}'.")
+            return
+
+        
+        registro_actual = registros_participante[-1] 
+
+        report_window = tk.Toplevel(self.root)
+        report_window.title(f"Reporte Individual - {nombre_participante}")
+        report_window.geometry("900x750")
