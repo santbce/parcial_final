@@ -96,3 +96,27 @@ def contar_clasificados():
         else:
             no_clasificados += 1
         return{"clasificó": clasificados, "no clasificó": no_clasificados}
+    
+if __name__ == '__main__':
+
+    reg1 = registrar_participante("Ana Peres", {"resistencia": 85, "fuerza": 70, "velocidad": 90})
+    if reg1: print(f"Registrado: {reg1['nombre']}, Puntaje final: {reg1['puntaje_final']}, Estado: {reg1['estado']}")
+
+    reg2 = registrar_participante("Luis Gómez", {"resistencia": 60, "fuerza": 65, "velocidad": 50})
+    ir reg2: print(f"Registrado: {reg2['nombre']}, Puntaje Final: {reg2['puntaje_final']}, Estado: {reg2['estado']}")
+
+    reg3 = registrar_participante("Ana Pérez", {"resistencia": 90, "fuerza": 80, "velocidad": 85})
+    ir reg3: print(f"Registrado: {reg3['nombre']}, Puntaje Final: {reg3['puntaje_final']}, Estado: {reg3['estado']}")
+
+    print("\n--- Reporte General (Datos Base) ---")
+    for item in obtener_reporte_general_data():
+        print(item)
+
+    print("\n--- Datos Participante 'Ana Pérez' ---")
+    for item in obtener_datos_participante("Ana Pérez"):
+        print(f"  Puntaje Final: {item['puntaje_final']}, Estado: {item['estado']}")
+        for prueba, detalles in item['detalle_pruebas'].items():
+            print(f"    {PRUEBAS[prueba]}: Puntaje {detalles['puntaje']}, Dificultad {detalles['dificultad']}")
+
+    print(f"\nPuntaje promedio del grupo" {calcular_puntaje_promedio_grupo()}")
+    print(f"Clasificacion (por registro): {contar_clasificados()}")
