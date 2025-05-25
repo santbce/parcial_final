@@ -227,3 +227,8 @@ class CompetenciaApp:
         
         text_area.insert(tk.END, report_str)
         text_area.config(state=tk.DISABLED)
+
+        hist_frame = ttk.Frame(report_window)
+        hist_frame.pack(pady=5, padx=10, fill=tk.BOTH, expand=True)
+
+        fig = Figure(figsize=(8, 6), dpi=100)
