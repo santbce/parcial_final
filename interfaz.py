@@ -198,3 +198,32 @@ class CompetenciaApp:
         report_window = tk.Toplevel(self.root)
         report_window.title(f"Reporte Individual - {nombre_participante}")
         report_window.geometry("900x750")
+
+        details_frame = ttk.Frame(report_window)
+        details_frame.pack(pady=5, padx=10, fill=tk.X)
+        
+        text_area = tk.Text(details_frame, wrap=tk.WORD, height=10, width=100)
+        text_area.pack(fill=tk.X)
+
+        report_str = f"Reporte para {nombre_participante} (Último Registro)\n"
+        report_str += f"Puntaje Final: {registro_actual['puntaje_final']}, Estado: {registro_actual['estado']}\n"
+        report_str += "Detalle de Pruebas (Último Registro):\n"
+        
+        nombres_pruebas = []
+        puntajes_pruebas = []
+        dificultades_pruebas = []
+        ponderados_pruebas = []
+
+        for prueba_key, detalles in registro_actual['detalle_pruebas'].items():
+            nombre_amigable = gestion.PRUEBAS.get(prueba_key, prueba_key)
+            nombres_pruebas.append(nombre_amigable)
+            puntajes_pruebas.append(detalles['puntaje'])
+            dificultades_pruebas.append(detalles['dificultad'])
+            ponderados_pruebas.append(detalles['puntaje_ponderado_prueba'])
+            report_str += (f"  - {nombre_amigable}: "
+                           f"Puntaje {detalles['puntaje']}, "
+                           f"Dificultad {detalles['dificultad']}, "
+                           f"Ponderado {detalles['puntaje_ponderado_prueba']:.2f}\n")
+        
+        text_area.insert(tk.END, report_str)
+        text_area.config(state=tk.DISABLED)
