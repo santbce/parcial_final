@@ -32,11 +32,11 @@ def registrar_participante(nombre_participante, resultados_pruebas):
             print(f"Error: El puntaje para {PRUEBAS.get(prueba_key, prueba_key)} debe estar entre 0 y 100.")
             return None
 
-        dificultad = round(random.uniform(1.0, 1.3), 2)
+        dificultad = round(random.uniform(1.0, 1.3), 2)  # Dificultad aleatoria entre 1.0 y 1.3
         detalle_pruebas[prueba_key] = {
             "puntaje": puntaje,
             "dificultad": dificultad,
-            "puntaje_ponderado_prueba": puntaje * dificultad
+            "puntaje_ponderado_prueba": puntaje * dificultad # Storing for individual report
         }
         suma_puntaje_por_dificultad += puntaje * dificultad
         suma_dificultades += dificultad
@@ -80,7 +80,7 @@ def obtener_datos_participante(nombre_participante):
     for registro in datos_participantes:
         if registro["nombre"].lower() == nombre_participante.lower():
             registros_filtrados.append(registro)
-    return registros_filtrados
+    return registros_filtrados 
 
 def calcular_puntaje_promedio_grupo():
     """
@@ -93,11 +93,10 @@ def calcular_puntaje_promedio_grupo():
 
 def contar_clasificados():
     """
-    cuenta cauntos participantes clasificaron y cuantos no.
-    cada registro se considera una entrada individual en el conteo.
-    si se desea contar solo una vez por participante(por ejemplo, su ultima participacion)
-    habia que ajustar la logica para evitar duplicados"""
-
+    Cuenta cuántos participantes clasificaron y cuántos no.
+    Considers each registration as a separate entry for classification count.
+    If unique participant classification is needed, logic should adapt (e.g., based on latest entry).
+    """
     clasificados = 0
     no_clasificados = 0
     for registro in datos_participantes:
@@ -105,17 +104,18 @@ def contar_clasificados():
             clasificados += 1
         else:
             no_clasificados += 1
-        return{"clasificó": clasificados, "no clasificó": no_clasificados}
-    
-if __name__ == '__main__':
+    return {"Clasificó": clasificados, "No clasificó": no_clasificados}
 
-    reg1 = registrar_participante("Ana Peres", {"resistencia": 85, "fuerza": 70, "velocidad": 90})
-    if reg1: print(f"Registrado: {reg1['nombre']}, Puntaje final: {reg1['puntaje_final']}, Estado: {reg1['estado']}")
+
+if __name__ == '__main__':
+    
+    reg1 = registrar_participante("Ana Pérez", {"resistencia": 85, "fuerza": 70, "velocidad": 90})
+    if reg1: print(f"Registrado: {reg1['nombre']}, Puntaje Final: {reg1['puntaje_final']}, Estado: {reg1['estado']}")
 
     reg2 = registrar_participante("Luis Gómez", {"resistencia": 60, "fuerza": 65, "velocidad": 50})
     if reg2: print(f"Registrado: {reg2['nombre']}, Puntaje Final: {reg2['puntaje_final']}, Estado: {reg2['estado']}")
-
-    reg3 = registrar_participante("Ana Pérez", {"resistencia": 90, "fuerza": 80, "velocidad": 85})
+    
+    reg3 = registrar_participante("Ana Pérez", {"resistencia": 90, "fuerza": 80, "velocidad": 85}) # Otra entrada para Ana
     if reg3: print(f"Registrado: {reg3['nombre']}, Puntaje Final: {reg3['puntaje_final']}, Estado: {reg3['estado']}")
 
     print("\n--- Reporte General (Datos Base) ---")
@@ -127,6 +127,6 @@ if __name__ == '__main__':
         print(f"  Puntaje Final: {item['puntaje_final']}, Estado: {item['estado']}")
         for prueba, detalles in item['detalle_pruebas'].items():
             print(f"    {PRUEBAS[prueba]}: Puntaje {detalles['puntaje']}, Dificultad {detalles['dificultad']}")
-
-    print(f"\nPuntaje promedio del grupo", calcular_puntaje_promedio_grupo())
-    print(f"Clasificacion (por registro): {contar_clasificados()}")
+    
+    print(f"\nPuntaje promedio del grupo: {calcular_puntaje_promedio_grupo()}")
+    print(f"Clasificación (por registro): {contar_clasificados()}")

@@ -273,5 +273,4 @@ class CompetenciaApp:
         canvas_widget.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
         canvas.draw()
 
-
         
