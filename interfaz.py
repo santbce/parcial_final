@@ -141,7 +141,18 @@ class CompetenciaApp:
             report_str += "\nEstadísticas Descriptivas (Puntajes por Prueba y Final)\n"
             puntaje_cols = [col for col in df.columns if '_puntaje' in col or col == 'puntaje_final']
             if puntaje_cols:
-                report_str += df[puntaje_cols].describe().to_string()
+                descripcion = df[puntaje_cols].describe()
+                descripcion.rename(index={
+            'count': 'cantidad',
+            'mean': 'promedio',
+            'std': 'desviación',
+            'min': 'mínimo',
+            '25%': '1er cuartil',
+            '50%': 'mediana',
+            '75%': '3er cuartil',
+            'max': 'máximo'
+            }, inplace=True)
+                report_str += descripcion.to_string()
             else:
                 report_str += "No hay suficientes datos de puntajes para estadísticas descriptivas.\n"
             report_str += "\n\n"
@@ -263,7 +274,4 @@ class CompetenciaApp:
         canvas.draw()
 
 
-if __name__ == '__main__':
-    root = tk.Tk()
-    app = CompetenciaApp(root)
-    root.mainloop()
+        
