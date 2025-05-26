@@ -1,1 +1,3 @@
-import tkinder as tk
+import tkinter as tk
+import interfaz
+
