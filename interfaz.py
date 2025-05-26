@@ -117,13 +117,14 @@ class CompetenciaApp:
         scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
         text_area.config(yscrollcommand=scrollbar.set)
 
-        report_str = "Reporte General de Rendimiento\n\n"
+        report_str = " Reporte General de Rendimiento \n\n"
         for item in gestion.obtener_reporte_general_data():
             report_str += f"Participante: {item['nombre']}, Puntaje Final: {item['puntaje_final']}, Estado: {item['estado']}\n"
         
-        report_str += f"\Estadísticas del Grupo\n"
+        report_str += f"\n Estadísticas del Grupo \n"
         report_str += f"Puntaje Promedio del Grupo: {gestion.calcular_puntaje_promedio_grupo()}\n"
-
+        
+        
         pd_data = []
         for reg in gestion.datos_participantes:
             row = {
@@ -138,26 +139,20 @@ class CompetenciaApp:
         df = pd.DataFrame(pd_data)
 
         if not df.empty:
-            report_str += "\nEstadísticas Descriptivas (Puntajes por Prueba y Final)\n"
+            report_str += "\n Estadísticas Descriptivas (Puntajes por Prueba y Final) \n"
             puntaje_cols = [col for col in df.columns if '_puntaje' in col or col == 'puntaje_final']
             if puntaje_cols:
-                descripcion = df[puntaje_cols].describe()
-                descripcion.rename(index={
-            'count': 'cantidad',
-            'mean': 'promedio',
-            'std': 'desviación',
-            'min': 'mínimo',
-            '25%': '1er cuartil',
-            '50%': 'mediana',
-            '75%': '3er cuartil',
-            'max': 'máximo'
-            }, inplace=True)
-                report_str += descripcion.to_string()
+                report_str += df[puntaje_cols].describe().rename(index={
+    'count': 'cantidad',
+    'mean': 'promedio',
+    'std': 'desviación'
+}).to_string()
+
             else:
                 report_str += "No hay suficientes datos de puntajes para estadísticas descriptivas.\n"
             report_str += "\n\n"
 
-            report_str += "--- Matriz de Correlación (Puntajes por Prueba) ---\n"
+            report_str += " Matriz de Correlación (Puntajes por Prueba) \n"
             score_cols_for_corr = [col for col in df.columns if '_puntaje' in col]
             if len(score_cols_for_corr) > 1:
                 report_str += df[score_cols_for_corr].corr().to_string()
@@ -208,15 +203,16 @@ class CompetenciaApp:
 
         report_window = tk.Toplevel(self.root)
         report_window.title(f"Reporte Individual - {nombre_participante}")
-        report_window.geometry("900x750")
+        report_window.geometry("900x750") 
 
+        
         details_frame = ttk.Frame(report_window)
         details_frame.pack(pady=5, padx=10, fill=tk.X)
         
         text_area = tk.Text(details_frame, wrap=tk.WORD, height=10, width=100)
         text_area.pack(fill=tk.X)
 
-        report_str = f"Reporte para {nombre_participante} (Último Registro)\n"
+        report_str = f" Reporte para {nombre_participante} (Último Registro) \n"
         report_str += f"Puntaje Final: {registro_actual['puntaje_final']}, Estado: {registro_actual['estado']}\n"
         report_str += "Detalle de Pruebas (Último Registro):\n"
         
@@ -239,12 +235,13 @@ class CompetenciaApp:
         text_area.insert(tk.END, report_str)
         text_area.config(state=tk.DISABLED)
 
+        
         hist_frame = ttk.Frame(report_window)
         hist_frame.pack(pady=5, padx=10, fill=tk.BOTH, expand=True)
 
-        fig = Figure(figsize=(8, 6), dpi=100)
+        fig = Figure(figsize=(8, 6), dpi=100) 
 
-    
+        
         ax1 = fig.add_subplot(311)
         ax1.bar(nombres_pruebas, puntajes_pruebas, color='skyblue')
         ax1.set_title('Resultados por Prueba (Puntaje)')
@@ -273,4 +270,8 @@ class CompetenciaApp:
         canvas_widget.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
         canvas.draw()
 
-        
+
+if __name__ == '__main__':
+    root = tk.Tk()
+    app = CompetenciaApp(root)
+    root.mainloop()
